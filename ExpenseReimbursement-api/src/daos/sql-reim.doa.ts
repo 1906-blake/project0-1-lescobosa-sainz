@@ -16,6 +16,7 @@ export async function findAll() {
 		inner join type using (type_id)
         inner join status using (status_id)
         inner join app_user w on (r.author = w.user_id)
+        left join r_view v on (r.resolver = v.r_id)
         `);
 
         // convert result from sql object to js object
@@ -40,7 +41,6 @@ export async function findByAuthorId(authorId: number) {
         inner join status using (status_id)
         inner join app_user w on (r.author = w.user_id)
 		 WHERE user_id = $1`, [authorId]);
-        console.log('auther i won');
 
         return result.rows.map(convertSqlReim);
     } catch (err) {
@@ -57,7 +57,12 @@ export async function findById(id: number) {
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
 
-        const result = await client.query('SELECT * FROM reim WHERE reimbursement_id = $1', [id]);
+        const result = await client.query(`Select * from reim r
+		inner join type using (type_id)
+        inner join status using (status_id)
+        inner join app_user w on (r.author = w.user_id)
+        left join r_view v on (r.resolver = v.r_id)
+		 WHERE reimbursement_id = $1`, [id]);
         const sqlReim = result.rows[0];
 
         return sqlReim && convertSqlReim(sqlReim);

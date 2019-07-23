@@ -81,11 +81,11 @@ export async function save(user: User) {
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
         const queryString = `
-            INSERT INTO app_user (username, pass, first_name, last_name, phone, email, role)
+            INSERT INTO app_user (username, pass, first_name, last_name, phone, email, role_id)
             VALUES 	($1, $2, $3, $4, $5, $6, $7)
             RETURNING user_id
         `;
-        const params = [user.username, user.password, user.firstName, user.lastName, user.phone, user.email, user.role];
+        const params = [user.username, user.password, user.firstName, user.lastName, user.phone, user.email, user.roleID];
         const result = await client.query(queryString, params);
         return result.rows[0].user_id;
     } catch (err) {
@@ -111,12 +111,17 @@ export async function update(user: User) {
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
         const queryString = `
-            UPDATE app_user SET username = $1, pass = $2, first_name = $3, last_name = $4, phone = $5, email = $6, role = $7
+            UPDATE app_user SET username = $1, pass = $2, first_name = $3, last_name = $4, phone = $5, email = $6, role_id = $7
             WHERE user_id = $8
             RETURNING *
         `;
-        const params = [user.username, user.password, user.firstName, user.lastName, user.phone, user.email, user.role, user.id];
+        const params = [user.username, user.password, user.firstName, user.lastName, user.phone, user.email, user.roleID, user.id];
+
         const result = await client.query(queryString, params);
+
+
+
+
         const sqlUser = result.rows[0];
         return convertSqlUser(sqlUser);
     } catch (err) {
