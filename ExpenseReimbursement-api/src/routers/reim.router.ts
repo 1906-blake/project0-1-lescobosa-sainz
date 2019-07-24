@@ -24,11 +24,12 @@ reimRouter.get('/author/userId/:userId', async (req, res) => {
 /**
  * /users/status/:statusID
  */
-reimRouter.get('/status/:statusId', async (req, res) => {
+reimRouter.get('/status/:statusId', [
+    authMiddleware(1,2,3),async (req, res) => {
     const status = req.params.statusId;
-    const reims = await rDao.findByStatusId(status);
+    const reims = await rDao.findByReimStatusId(status);
     res.json(reims);
-});
+}]);
 
 /**
  * /users
@@ -55,7 +56,7 @@ reimRouter.post('', async (req, res) => {
  * partially update user resource
  */
 reimRouter.patch('',[
-    authMiddleware(1,3), async (req, res) => {
+    authMiddleware(1,2,3), async (req, res) => {
 
         const updatedUser = await rDao.update(req.body);
         res.json(updatedUser);
@@ -66,8 +67,9 @@ reimRouter.patch('',[
  * /users/:id
  * find user by some id
  */
-reimRouter.get('/:id', async (req, res) => {
+reimRouter.get('/:id', [
+    authMiddleware(1,2,3),async (req, res) => {
     const reim = await rDao.findById(+req.params.id);
     res.json(reim);
-});
+}]);
 

@@ -31,7 +31,7 @@ export async function findAll() {
 }
 
 export async function findByAuthorId(authorId: number) {
-    console.log('finding status by statusid: ' + authorId);
+    console.log('finding status by authorid: ' + authorId);
     let client: PoolClient;
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
@@ -40,7 +40,7 @@ export async function findByAuthorId(authorId: number) {
 		inner join type using (type_id)
         inner join status using (status_id)
         inner join app_user w on (r.author = w.user_id)
-		 WHERE _id = $1`, [authorId]);
+		 WHERE user_id = $1`, [authorId]);
         console.log('auther i won');
 
         return result.rows.map(convertSqlReim);
@@ -75,19 +75,19 @@ export async function findById(id: number) {
     return undefined;
 }
 
-export async function findByStatusId(statusId: number) {
+export async function findByReimStatusId(statusId: number) {
     console.log('finding status by status id: ' + statusId);
     let client: PoolClient;
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
-
+        console.log(statusId);
         const result = await client.query(`Select * from reim r
 		inner join type using (type_id)
         inner join status using (status_id)
         inner join app_user w on (r.author = w.user_id)
 		 WHERE status_id = $1`, [statusId]);
-
-        return result.rows.map(convertSqlReim);
+       
+         return result.rows.map(convertSqlReim);
     } catch (err) {
         console.log(err);
     } finally {

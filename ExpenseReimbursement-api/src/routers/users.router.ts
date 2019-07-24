@@ -15,7 +15,7 @@ export const usersRouter = express.Router();
 //     });
 
 usersRouter.get('', [
-    authMiddleware(1, 2),
+    authMiddleware(1, 2,3),
     async (req, res) => {
         const users = await userDao.findAll();
         res.json(users);
@@ -25,10 +25,11 @@ usersRouter.get('', [
  * /users/:id
  * find user by some id
  */
-usersRouter.get('/:id', async (req, res) => {
+usersRouter.get('/:id',[
+    authMiddleware(1,2, 3), async (req, res) => {
     const user = await userDao.findById(+req.params.id);
     res.json(user);
-});
+}]);
 
 /**
  * /users/firstName/:firstName 
@@ -63,16 +64,17 @@ usersRouter.post('', async (req, res) => {
  * /users
  * partially update user resource
  */
-usersRouter.patch('', async (req, res) => {
-    const userId = req.body.id;
-    const currentLoggedInUser = req.session.user;
-    if (currentLoggedInUser && currentLoggedInUser.id === userId) {
+usersRouter.patch('', [
+    authMiddleware(1,2, 3),async (req, res) => {
+    // const userId = req.body.id;
+    // const currentLoggedInUser = req.session.user;
+    // if (currentLoggedInUser && currentLoggedInUser.id === userId) {
         const updatedUser = await userDao.update(req.body);
         res.json(updatedUser);
-    } else {
-        res.sendStatus(403);
-    }
-});
+    // } else {
+    //     res.sendStatus(403);
+    // }
+}]);
 
 /**
  * /users
