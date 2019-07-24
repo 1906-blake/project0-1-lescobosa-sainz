@@ -20,12 +20,15 @@
 
 /**
  * Auth middleware, same as above code just different sytax
- * @param roles
+ * @param role
  */
-export const authMiddleware = (...roles) => (req, res, next) => {
+export const authMiddleware = (...role) => (req, res, next) => {
     if (req.session.user) {
-        // console.log('current user = ', req.session.user);
-        if (roles.includes(req.session.user.role)) {
+        console.log('current user = ', req.session.user.roleID.id);
+        const userid = req.session.user.roleID.id;
+        console.log('current user = ', userid);
+
+        if (role.includes(userid)) {
             next();
         } else {
             // 403 means forbidden which means we know who they are

@@ -1,6 +1,6 @@
 import express from 'express';
 import * as userDao from '../daos/sql-user.dao';
-//import { authMiddleware } from '../middleware/auth.middleware';
+import { authMiddleware } from '../middleware/auth.middleware';
 
 export const usersRouter = express.Router();
 
@@ -8,18 +8,18 @@ export const usersRouter = express.Router();
  * /users
  * find all users 
  */
-usersRouter.get('',
-    async (req, res) => {
-        const users = await userDao.findAll();
-        res.json(users);
-    });
-
-// usersRouter.get('', [
-//     authMiddleware('admin', 'manager'),
+// usersRouter.get('',
 //     async (req, res) => {
 //         const users = await userDao.findAll();
 //         res.json(users);
-//     }]);
+//     });
+
+usersRouter.get('', [
+    authMiddleware(1, 2),
+    async (req, res) => {
+        const users = await userDao.findAll();
+        res.json(users);
+    }]);
 
 /**
  * /users/:id
@@ -31,7 +31,7 @@ usersRouter.get('/:id', async (req, res) => {
 });
 
 /**
- * /users/firstName/:firstName
+ * /users/firstName/:firstName 
  */
 usersRouter.get('/firstName/:firstName', async (req, res) => {
     const firstName = req.params.firstName;

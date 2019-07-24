@@ -116,12 +116,7 @@ export async function update(user: User) {
             RETURNING *
         `;
         const params = [user.username, user.password, user.firstName, user.lastName, user.phone, user.email, user.roleID, user.id];
-
         const result = await client.query(queryString, params);
-
-
-
-
         const sqlUser = result.rows[0];
         return convertSqlUser(sqlUser);
     } catch (err) {

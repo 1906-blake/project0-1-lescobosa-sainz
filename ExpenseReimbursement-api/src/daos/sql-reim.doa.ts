@@ -40,7 +40,8 @@ export async function findByAuthorId(authorId: number) {
 		inner join type using (type_id)
         inner join status using (status_id)
         inner join app_user w on (r.author = w.user_id)
-		 WHERE user_id = $1`, [authorId]);
+		 WHERE _id = $1`, [authorId]);
+        console.log('auther i won');
 
         return result.rows.map(convertSqlReim);
     } catch (err) {

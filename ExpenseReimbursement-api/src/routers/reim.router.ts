@@ -1,6 +1,6 @@
 import express from 'express';
 import * as rDao from '../daos/sql-reim.doa';
-//import { authMiddleware } from '../middleware/auth.middleware';
+import { authMiddleware } from '../middleware/auth.middleware';
 
 export const reimRouter = express.Router();
 
@@ -54,16 +54,13 @@ reimRouter.post('', async (req, res) => {
  * /users
  * partially update user resource
  */
-reimRouter.patch('', async (req, res) => {
-    // const userId = req.body.id;
-    // const currentLoggedInUser = req.session.user;
-    // if (currentLoggedInUser && currentLoggedInUser.id === userId) {
+reimRouter.patch('',[
+    authMiddleware(1,3), async (req, res) => {
+
         const updatedUser = await rDao.update(req.body);
         res.json(updatedUser);
-    // } else {
-    //     res.sendStatus(403);
-    // }
-});
+
+}]);
 
 /**
  * /users/:id
