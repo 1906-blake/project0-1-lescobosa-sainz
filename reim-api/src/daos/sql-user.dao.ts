@@ -9,8 +9,7 @@ export async function findAll() {
     let client: PoolClient;
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
-
-        const result = await client.query('SELECT * FROM app_user inner join role using (role_id)');
+        const result = await client.query('SELECT * FROM app_user left join role using (role_id)');
         // convert result from sql object to js object
         return result.rows.map(convertSqlUser);
     } catch (err) {

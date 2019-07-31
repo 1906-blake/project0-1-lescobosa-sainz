@@ -9,6 +9,6 @@ export default class User {
         public firstName = '',
         public lastName = '',
         public phone = '',
-        public roleID : Role
+        public roleID : Role 
     ) {}
 }

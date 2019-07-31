@@ -7,7 +7,7 @@ export default class Reim {
 
     constructor(
         public reimId = 0,
-        public author: User, // foreign key -> User, not null
+        public author: User, // foreign key -> User, not null 
         public amount = 0, // not null
         public dateSubmitted = '', // not null
         public dateResolved = '',
